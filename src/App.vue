@@ -4,11 +4,38 @@ import HeaderComponent from './components/HeaderComponent.vue'
 import PersonajeCard, { type Personaje } from './components/PersonajeCard.vue'
 import Influencers from './components/Influencers.vue'
 import spiderman from './assets/spiderman.jpg'
+import spider1 from './assets/spider1.jpg'
+import spider2 from './assets/spider2.jpg'
+import spider3 from './assets/spider3.jpg'
 import venom from './assets/venom.jpg'
+import venom1 from './assets/venom1.jpg'
+import venom2 from './assets/venom2.jpg'
+import venom3 from './assets/venom3.jpg'
 import hulk from './assets/hulk.jpg'
+import hulk1 from './assets/hulk1.jpg'
+import hulk2 from './assets/hulk2.jpg'
+import hulk3 from './assets/hulk3.jpg'
 import thor from './assets/thor.jpg'
+import thor1 from './assets/thor1.jpg'
+import thor2 from './assets/thor2.jpg'
+import thor3 from './assets/thor3.jpg'
 import doom from './assets/doom.jpg'
+import doom1 from './assets/doom1.jpg'
+import doom2 from './assets/doom2.jpg'
+import doom3 from './assets/doom3.jpg'
 import thanos from './assets/thanos.jpg'
+import thanos1 from './assets/thanos1.jpg'
+import thanos2 from './assets/thanos2.jpg'
+import thanos3 from './assets/thanos3.jpg'
+
+const comicImagesByCharacter: Record<string, string[]> = {
+  'Spider-Man': [spider1, spider2, spider3],
+  Venom: [venom1, venom2, venom3],
+  Hulk: [hulk1, hulk2, hulk3],
+  Thor: [thor1, thor2, thor3],
+  'Dr. Doom': [doom1, doom2, doom3],
+  Thanos: [thanos1, thanos2, thanos3]
+}
 
 const personajes: Personaje[] = [
   {
@@ -22,8 +49,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Avengers',
     debilidad: 'Agotamiento y vulnerabilidad física',
     descripcion: 'Un joven héroe de Nueva York que utiliza sus poderes para proteger a otras personas.',
-    imagen: spiderman,
-    video: '/videos/spiderman.mp4'
+    imagen: spiderman
   },
   {
     id: 2,
@@ -36,8 +62,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Ninguna',
     debilidad: 'Sonido y fuego',
     descripcion: 'Un simbionte alienígena que se une a Eddie Brock, convirtiéndolo en un formidable enemigo de Spider-Man.',
-    imagen: venom,
-    video: '/videos/ironman.mp4'
+    imagen: venom
   },
   {
     id: 3,
@@ -50,8 +75,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Avengers',
     debilidad: 'Control emocional',
     descripcion: 'Bruce Banner se transforma en Hulk, una de las entidades físicamente más poderosas de Marvel.',
-    imagen: hulk,
-    video: '/videos/hulk.mp4'
+    imagen: hulk
   },
   {
     id: 4,
@@ -64,8 +88,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Avengers',
     debilidad: 'Conflictos emocionales y límites mágicos',
     descripcion: 'Dios asgardiano del trueno y uno de los principales defensores de la Tierra.',
-    imagen: thor,
-    video: '/videos/thor.mp4'
+    imagen: thor
   },
   {
     id: 5,
@@ -78,8 +101,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Ninguna',
     debilidad: 'Arrogancia y dependencia de sus máquinas',
     descripcion: 'Un genio científico y hechicero que gobierna Latveria y es uno de los enemigos más formidables de los héroes de Marvel.',
-    imagen: doom,
-    video: '/videos/wolverine.mp4'
+    imagen: doom
   },
   {
     id: 6,
@@ -92,8 +114,7 @@ const personajes: Personaje[] = [
     afiliacion: 'Ninguna',
     debilidad: 'Obsesión por la muerte y la búsqueda de las Gemas del Infinito',
     descripcion: 'Un titán loco obsesionado con el equilibrio del universo, conocido por su búsqueda de las Gemas del Infinito.',
-    imagen: thanos,
-    video: '/videos/capitan-america.mp4'
+    imagen: thanos
   }
 ]
 
@@ -104,18 +125,36 @@ const personajeMultimedia = ref<Personaje>(personajes[0])
 
 const categorias = ['Todos', 'Héroe', 'Villano']
 
-
 const personajesFiltrados = computed(() => {
   if (categoriaActual.value === 'Todos') return personajes
   return personajes.filter((personaje) => personaje.categoria === categoriaActual.value)
 })
 
+function getComicImages(personaje: Personaje) {
+  return comicImagesByCharacter[personaje.nombre] ?? [personaje.imagen]
+}
+
+const comicsDisponibles = computed(() => {
+  const base = personajeSeleccionado.value ?? personajes[0]
+  return getComicImages(base)
+})
 
 function mostrarPersonaje(personaje: Personaje) {
   personajeSeleccionado.value = personaje
+  personajeMultimedia.value = { ...personaje, imagen: getComicImages(personaje)[0] }
   setTimeout(() => {
     document.getElementById('caracteristicas')?.scrollIntoView({ behavior: 'smooth' })
   }, 50)
+}
+
+function seleccionarComic(index: number) {
+  const base = personajeSeleccionado.value ?? personajes[0]
+  const images = getComicImages(base)
+  personajeMultimedia.value = {
+    ...base,
+    imagen: images[index] ?? base.imagen,
+    nombre: `${base.nombre} • Comic ${index + 1}`
+  }
 }
 
 
@@ -149,8 +188,7 @@ function scrollToSection(id: string) {
 
     <section id="catalogo" class="section">
       <div class="section-heading">
-        <span class="eyebrow">CATÁLOGO</span>
-        <h2>Personajes destacados</h2>
+        <h2 class="eyebrow">CATÁLOGO</h2>
         <p>
           Selecciona un personaje para consultar sus principales características.
         </p>
@@ -180,51 +218,61 @@ function scrollToSection(id: string) {
 
     <section id="caracteristicas" class="section dark-section">
       <div class="section-heading">
-        <span class="eyebrow">CARACTERÍSTICAS</span>
-        <h2>Ficha del personaje</h2>
-        <p>La información se despliega mediante una función al seleccionar una tarjeta.</p>
+        <h2 class="eyebrow">CARACTERÍSTICAS</h2>
       </div>
 
       <div v-if="personajeSeleccionado" class="character-detail">
-        <img
-          :src="personajeSeleccionado.imagen"
-          :alt="personajeSeleccionado.nombre"
-          class="detail-image"
-        />
+        <div class="detail-top">
+          <img
+            :src="personajeSeleccionado.imagen"
+            :alt="personajeSeleccionado.nombre"
+            class="detail-image"
+          />
 
-        <div class="detail-info">
-          <span class="eyebrow">{{ personajeSeleccionado.categoria }}</span>
-          <h2>{{ personajeSeleccionado.nombre }}</h2>
-          <p class="detail-alter">{{ personajeSeleccionado.alterEgo }}</p>
-          <p>{{ personajeSeleccionado.descripcion }}</p>
-
-          <div class="feature-list">
-            <div class="feature">
-              <span>01</span>
-              <div><small>PODERES</small><strong>{{ personajeSeleccionado.poderes }}</strong></div>
-            </div>
-            <div class="feature">
-              <span>02</span>
-              <div><small>PRIMERA APARICIÓN</small><strong>{{ personajeSeleccionado.primeraAparicion }}</strong></div>
-            </div>
-            <div class="feature">
-              <span>03</span>
-              <div><small>AFILIACIÓN</small><strong>{{ personajeSeleccionado.afiliacion }}</strong></div>
-            </div>
-            <div class="feature">
-              <span>04</span>
-              <div><small>DEBILIDAD</small><strong>{{ personajeSeleccionado.debilidad }}</strong></div>
-            </div>
-            <div class="feature">
-              <span>05</span>
-              <div><small>UNIVERSO</small><strong>{{ personajeSeleccionado.universo }}</strong></div>
-            </div>
+          <div class="detail-info">
+            <span class="eyebrow">{{ personajeSeleccionado.categoria }}</span>
+            <h2>{{ personajeSeleccionado.nombre }}</h2>
+            <p class="detail-alter">{{ personajeSeleccionado.alterEgo }}</p>
+            <p>{{ personajeSeleccionado.descripcion }}</p>
           </div>
-
-          <button class="secondary-btn" @click="personajeSeleccionado = null">
-            Cerrar ficha
-          </button>
         </div>
+
+        <ul class="feature-list">
+          <li class="feature">
+            <div class="feature-content">
+              <small>PODERES</small>
+              <strong>{{ personajeSeleccionado.poderes }}</strong>
+            </div>
+          </li>
+          <li class="feature">
+            <div class="feature-content">
+              <small>PRIMERA APARICIÓN</small>
+              <strong>{{ personajeSeleccionado.primeraAparicion }}</strong>
+            </div>
+          </li>
+          <li class="feature">
+            <div class="feature-content">
+              <small>AFILIACIÓN</small>
+              <strong>{{ personajeSeleccionado.afiliacion }}</strong>
+            </div>
+          </li>
+          <li class="feature">
+            <div class="feature-content">
+              <small>DEBILIDAD</small>
+              <strong>{{ personajeSeleccionado.debilidad }}</strong>
+            </div>
+          </li>
+          <li class="feature">
+            <div class="feature-content">
+              <small>UNIVERSO</small>
+              <strong>{{ personajeSeleccionado.universo }}</strong>
+            </div>
+          </li>
+        </ul>
+
+        <button class="secondary-btn" @click="personajeSeleccionado = null">
+          Cerrar ficha
+        </button>
       </div>
 
       <div v-else class="empty-state">
@@ -236,37 +284,26 @@ function scrollToSection(id: string) {
 
     <section id="multimedia" class="section">
       <div class="section-heading">
-        <span class="eyebrow">03 / MULTIMEDIA</span>
-        <h2>Contenido visual</h2>
-        <p>Las imágenes y clips se definen mediante objetos dentro del arreglo de personajes.</p>
+        <h2 class="eyebrow">CÓMICS</h2>
+        <p>Conoce algunos de los mejores cómics del personaje</p>
       </div>
 
       <div class="media-layout">
         <div class="media-card">
           <img :src="personajeMultimedia.imagen" :alt="personajeMultimedia.nombre" />
-          <div class="media-caption">
-            <span>IMAGEN</span>
-            <h3>{{ personajeMultimedia.nombre }}</h3>
-          </div>
         </div>
 
         <div class="video-card">
-          <div class="video-placeholder">
-            <div class="play">▶</div>
-            <h3>Clip multimedia</h3>
-            <p>
-              Para evitar depender de material con copyright dentro del proyecto,
-              puedes colocar un clip propio en <code>public/videos</code>.
-            </p>
-          </div>
-          <div class="video-controls">
+          <div class="comic-gallery">
             <button
-              v-for="personaje in personajes.slice(0, 3)"
-              :key="personaje.id"
-              @click="personajeMultimedia = personaje"
-              :class="{ active: personaje.id === personajeMultimedia.id }"
+              v-for="(image, index) in comicsDisponibles"
+              :key="image"
+              class="comic-thumb"
+              :class="{ active: personajeMultimedia.imagen === image }"
+              @click="seleccionarComic(index)"
             >
-              {{ personaje.nombre }}
+              <img :src="image" :alt="`Comic ${index + 1}`" />
+              <span>Comic {{ index + 1 }}</span>
             </button>
           </div>
         </div>
@@ -280,15 +317,16 @@ function scrollToSection(id: string) {
 
   <footer>
     <div>
-      <strong>MARVEL COMICS HUB</strong>
-      <p>Proyecto académico desarrollado con Vue 3.</p>
+      <strong>MARVEL COMICS WIKI</strong>
+      <p>Daniel Emmanuel Tun Alfaro</p>
     </div>
-    <span>© {{ new Date().getFullYear() }} • Uso educativo</span>
   </footer>
 </template>
 
 
 <style>
+
+
 .hero {
   position: relative;
   min-height: 720px;
@@ -296,74 +334,335 @@ function scrollToSection(id: string) {
   align-items: center;
   padding: 130px 9vw 90px;
   overflow: hidden;
-  background: linear-gradient(90deg, #090909 0%, rgba(9,9,9,.88) 45%, rgba(9,9,9,.25) 100%), radial-gradient(circle at 75% 45%, rgba(230,36,41,.25), transparent 32%), repeating-linear-gradient(115deg, #0b0b0b 0 2px, #101010 2px 4px);
+  background: transparent;
 }
-.hero::after { content: ''; position: absolute; right: -100px; bottom: -180px; width: 620px; height: 620px; border: 70px solid rgba(230,36,41,.08); border-radius: 50%; }
-.hero-content { max-width: 690px; position: relative; z-index: 2; }
-.eyebrow { color: var(--red); font-size: 11px; font-weight: 800; letter-spacing: 2.5px; }
-.hero h1 { margin: 18px 0; font-family: 'Bebas Neue'; font-size: clamp(70px, 10vw, 140px); line-height: .78; letter-spacing: 2px; }
-.hero h1 span { color: var(--red); -webkit-text-stroke: 1px var(--red); }
-.hero p { max-width: 560px; color: #bbb; line-height: 1.8; font-size: 15px; }
-.hero-actions { display: flex; gap: 12px; margin-top: 30px; }
-.primary-btn, .secondary-btn { border: 0; padding: 14px 20px; font-weight: 800; font-size: 12px; text-transform: uppercase; cursor: pointer; transition: .2s; }
-.primary-btn { color: #fff; background: var(--red); }
-.primary-btn:hover { transform: translateY(-2px); background: #ff3035; }
-.secondary-btn { color: #fff; background: transparent; border: 1px solid #555; }
-.secondary-btn:hover { border-color: #fff; }
-.hero-badge { position: absolute; right: 9vw; bottom: 90px; z-index: 2; display: flex; align-items: center; gap: 15px; border-left: 2px solid var(--red); padding-left: 15px; }
-.hero-badge strong { font-family: 'Bebas Neue'; font-size: 60px; }
-.hero-badge span { font-size: 10px; font-weight: 800; line-height: 1.5; }
-.section { padding: 100px 8vw; }
-.dark-section { background: #0f0f0f; padding: 100px 8vw; }
-.section-heading { max-width: 650px; margin-bottom: 45px; }
-.section-heading h2 { margin: 8px 0 10px; font-family: 'Bebas Neue'; font-size: clamp(45px, 6vw, 76px); line-height: .9; }
-.section-heading p { color: var(--gray); line-height: 1.7; }
-.filters { display: flex; gap: 8px; margin-bottom: 25px; flex-wrap: wrap; }
-.filter-btn { padding: 9px 14px; background: transparent; color: #aaa; border: 1px solid #333; cursor: pointer; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-.filter-btn.selected, .filter-btn:hover { color: #fff; border-color: var(--red); background: rgba(230,36,41,.08); }
-.character-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-.character-detail { display: grid; grid-template-columns: minmax(300px, .8fr) 1.2fr; gap: 50px; align-items: center; max-width: 1100px; }
-.detail-image { width: 100%; max-height: 600px; object-fit: cover; background: #181818; }
-.detail-info h2 { font-family: 'Bebas Neue'; font-size: 80px; line-height: .85; margin: 8px 0; }
-.detail-alter { color: #777; margin-bottom: 18px; }
-.detail-info > p { color: #aaa; line-height: 1.7; margin-bottom: 25px; }
-.feature-list { border-top: 1px solid #292929; margin-bottom: 25px; }
-.feature { display: grid; grid-template-columns: 40px 1fr; padding: 14px 0; border-bottom: 1px solid #292929; }
-.feature > span { color: var(--red); font-family: 'Bebas Neue'; font-size: 18px; }
-.feature small { display: block; color: #666; font-size: 8px; letter-spacing: 1.5px; margin-bottom: 3px; }
-.feature strong { font-size: 12px; }
-.empty-state { min-height: 300px; display: grid; place-items: center; text-align: center; border: 1px dashed #333; padding: 40px; }
-.empty-icon { color: var(--red); font-size: 40px; }
-.empty-state h3 { font-family: 'Bebas Neue'; font-size: 32px; }
-.empty-state p { color: #777; }
-.media-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-.media-card, .video-card { position: relative; min-height: 450px; background: #111; border: 1px solid #252525; overflow: hidden; }
-.media-card img { width: 100%; height: 100%; min-height: 450px; object-fit: cover; }
-.media-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 35px 25px 25px; background: linear-gradient(transparent, rgba(0,0,0,.9)); }
-.media-caption span { color: var(--red); font-size: 9px; font-weight: 800; }
-.media-caption h3 { font-family: 'Bebas Neue'; font-size: 42px; }
-.video-placeholder { min-height: 385px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; background: linear-gradient(rgba(9,9,9,.82), rgba(9,9,9,.92)), repeating-linear-gradient(45deg, #141414 0 8px, #101010 8px 16px); }
-.play { width: 70px; height: 70px; display: grid; place-items: center; margin-bottom: 20px; border: 1px solid var(--red); border-radius: 50%; color: var(--red); }
-.video-placeholder h3 { font-family: 'Bebas Neue'; font-size: 35px; }
-.video-placeholder p { max-width: 430px; color: #777; font-size: 12px; line-height: 1.6; margin-top: 10px; }
-.video-controls { display: flex; gap: 5px; padding: 15px; border-top: 1px solid #292929; overflow-x: auto; }
-.video-controls button { white-space: nowrap; padding: 8px 12px; color: #aaa; border: 1px solid #333; background: transparent; cursor: pointer; font-size: 10px; }
-.video-controls button.active, .video-controls button:hover { color: white; border-color: var(--red); }
-footer { display: flex; justify-content: space-between; align-items: center; padding: 35px 8vw; border-top: 1px solid #292929; color: #666; font-size: 10px; }
-footer strong { color: #fff; font-family: 'Bebas Neue'; font-size: 20px; }
-footer p { margin-top: 3px; }
+
+.hero::after {
+  content: none;
+}
+
+.hero-content {
+  max-width: 690px;
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+}
+
+.hero h1 {
+  margin: 18px 0;
+  font-family: 'Bebas Neue';
+  font-size: clamp(70px, 10vw, 140px);
+  line-height: .78;
+  letter-spacing: 2px;
+}
+
+.hero h1 span {
+  color: var(--red);
+  -webkit-text-stroke: 1px var(--red);
+}
+
+.hero p {
+  max-width: 560px;
+  color: #bbb;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.secondary-btn {
+  padding: 14px 20px;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #fff;
+  background: transparent;
+  border: 1px solid #555;
+}
+
+.secondary-btn:hover {
+  border-color: #fff;
+}
+
+.section {
+  padding: 100px 8vw;
+}
+
+.dark-section {
+  background: #0f0f0f;
+  padding: 100px 8vw;
+}
+
+.section-heading {
+  max-width: 650px;
+  margin-bottom: 45px;
+}
+
+.section-heading h2 {
+  margin: 8px 0 10px;
+  font-family: 'Bebas Neue';
+  font-size: clamp(45px, 6vw, 76px);
+  line-height: .9;
+}
+
+.section-heading p {
+  color: var(--gray);
+  line-height: 1.7;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 9px 14px;
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #333;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.filter-btn.selected,
+.filter-btn:hover {
+  color: #fff;
+  border-color: var(--red);
+  background: rgba(230,36,41,.08);
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.character-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.detail-top {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.8fr);
+  gap: 50px;
+  align-items: start;
+}
+
+.detail-image {
+  width: 100%;
+  max-height: 600px;
+  object-fit: cover;
+  background: #181818;
+}
+
+.detail-info {
+  width: 100%;
+  min-width: 0;
+}
+
+.detail-info h2 {
+  font-family: 'Bebas Neue';
+  font-size: 80px;
+  line-height: .85;
+  margin: 8px 0;
+}
+
+.detail-alter {
+  color: #777;
+  margin-bottom: 18px;
+}
+
+.detail-info > p {
+  color: #aaa;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.feature-list {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.feature {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+.feature-content {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+.feature strong {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  white-space: normal !important;
+}
+
+.empty-state {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 1px dashed #333;
+  padding: 40px;
+}
+
+.empty-icon {
+  color: var(--red);
+  font-size: 40px;
+}
+
+.empty-state h3 {
+  font-family: 'Bebas Neue';
+  font-size: 32px;
+}
+
+.empty-state p {
+  color: #777;
+}
+
+.media-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.media-card,
+.video-card {
+  position: relative;
+  min-height: 450px;
+  background: #111;
+  border: 1px solid #252525;
+  overflow: hidden;
+}
+
+.media-card img {
+  width: 100%;
+  height: 100%;
+  min-height: 450px;
+  object-fit: cover;
+}
+
+.comic-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 20px;
+}
+
+.comic-thumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #333;
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  color: #fff;
+  text-align: left;
+}
+
+.comic-thumb img {
+  width: 96px;
+  height: 120px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.comic-thumb span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.comic-thumb.active,
+.comic-thumb:hover {
+  border-color: var(--red);
+  background: rgba(230,36,41,.06);
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35px 8vw;
+  border-top: 1px solid #292929;
+  color: #666;
+  font-size: 10px;
+}
+
+footer strong {
+  color: #fff;
+  font-family: 'Bebas Neue';
+  font-size: 20px;
+}
+
+footer p {
+  margin-top: 3px;
+}
 
 @media (max-width: 900px) {
-  .character-grid { grid-template-columns: repeat(2, 1fr); }
-  .character-detail, .media-layout { grid-template-columns: 1fr; }
+  .character-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .character-detail,
+  .media-layout {
+    grid-template-columns: 1fr;
+  }
 }
+
 @media (max-width: 620px) {
-  .hero { min-height: 700px; padding: 150px 7vw 70px; }
-  .hero-badge { display: none; }
-  .hero-actions { flex-direction: column; }
-  .section, .dark-section { padding: 70px 6vw; }
-  .character-grid { grid-template-columns: 1fr; }
-  .detail-info h2 { font-size: 60px; }
-  footer { flex-direction: column; gap: 15px; text-align: center; }
+  .hero {
+    min-height: 700px;
+    padding: 150px 7vw 70px;
+  }
+
+  .section,
+  .dark-section {
+    padding: 70px 6vw;
+  }
+
+  .character-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-info h2 {
+    font-size: 60px;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
 }
 </style>

@@ -13,7 +13,7 @@ const menu = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'catalogo', label: 'Catálogo' },
   { id: 'caracteristicas', label: 'Características' },
-  { id: 'multimedia', label: 'Multimedia' },
+  { id: 'multimedia', label: 'Cómics' },
   { id: 'influencers', label: 'Influencers' }
 ]
 </script>
@@ -82,7 +82,6 @@ const menu = [
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  transition: .2s;
 }
 .nav-link:hover, .nav-link.active { color: #fff; }
 .nav-link.active { border-bottom: 2px solid var(--red); }
