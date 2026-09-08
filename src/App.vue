@@ -1,37 +1,155 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import HeaderComponent from './components/HeaderComponent.vue'
+import PersonajeCard, { type Personaje } from './components/PersonajeCard.vue'
+import Influencers from './components/Influencers.vue'
+import spiderman from './assets/spiderman.jpg'
+import venom from './assets/venom.jpg'
+import hulk from './assets/hulk.jpg'
+import thor from './assets/thor.jpg'
+import doom from './assets/doom.jpg'
+import thanos from './assets/thanos.jpg'
+
+const personajes: Personaje[] = [
+  {
+    id: 1,
+    nombre: 'Spider-Man',
+    alterEgo: 'Peter Parker',
+    categoria: 'Héroe',
+    universo: 'Tierra-616',
+    poderes: 'Fuerza, agilidad, sentido arácnido',
+    primeraAparicion: 'Amazing Fantasy #15 (1962)',
+    afiliacion: 'Avengers',
+    debilidad: 'Agotamiento y vulnerabilidad física',
+    descripcion: 'Un joven héroe de Nueva York que utiliza sus poderes para proteger a otras personas.',
+    imagen: spiderman,
+    video: '/videos/spiderman.mp4'
+  },
+  {
+    id: 2,
+    nombre: 'Venom',
+    alterEgo: 'Eddie Brock',
+    categoria: 'Villano',
+    universo: 'Tierra-616',
+    poderes: 'Fuerza, agilidad y telarañas',
+    primeraAparicion: 'The Amazing Spider-Man #300 (1988)',
+    afiliacion: 'Ninguna',
+    debilidad: 'Sonido y fuego',
+    descripcion: 'Un simbionte alienígena que se une a Eddie Brock, convirtiéndolo en un formidable enemigo de Spider-Man.',
+    imagen: venom,
+    video: '/videos/ironman.mp4'
+  },
+  {
+    id: 3,
+    nombre: 'Hulk',
+    alterEgo: 'Bruce Banner',
+    categoria: 'Héroe',
+    universo: 'Tierra-616',
+    poderes: 'Fuerza, resistencia y regeneración',
+    primeraAparicion: 'The Incredible Hulk #1 (1962)',
+    afiliacion: 'Avengers',
+    debilidad: 'Control emocional',
+    descripcion: 'Bruce Banner se transforma en Hulk, una de las entidades físicamente más poderosas de Marvel.',
+    imagen: hulk,
+    video: '/videos/hulk.mp4'
+  },
+  {
+    id: 4,
+    nombre: 'Thor',
+    alterEgo: 'Thor Odinson',
+    categoria: 'Héroe',
+    universo: 'Tierra-616',
+    poderes: 'Fuerza, longevidad y control del rayo',
+    primeraAparicion: 'Journey into Mystery #83 (1962)',
+    afiliacion: 'Avengers',
+    debilidad: 'Conflictos emocionales y límites mágicos',
+    descripcion: 'Dios asgardiano del trueno y uno de los principales defensores de la Tierra.',
+    imagen: thor,
+    video: '/videos/thor.mp4'
+  },
+  {
+    id: 5,
+    nombre: 'Dr. Doom',
+    alterEgo: 'Victor von Doom',
+    categoria: 'Villano',
+    universo: 'Tierra-616',
+    poderes: 'Inteligencia, tecnología y poderes mágicos',
+    primeraAparicion: 'Fantastic Four #53 (1964)',
+    afiliacion: 'Ninguna',
+    debilidad: 'Arrogancia y dependencia de sus máquinas',
+    descripcion: 'Un genio científico y hechicero que gobierna Latveria y es uno de los enemigos más formidables de los héroes de Marvel.',
+    imagen: doom,
+    video: '/videos/wolverine.mp4'
+  },
+  {
+    id: 6,
+    nombre: 'Thanos',
+    alterEgo: 'Thanos',
+    categoria: 'Villano',
+    universo: 'Tierra-616',
+    poderes: 'Fuerza, resistencia y manipulación de energía',
+    primeraAparicion: 'Iron Man Vol. 1 #55 ',
+    afiliacion: 'Ninguna',
+    debilidad: 'Obsesión por la muerte y la búsqueda de las Gemas del Infinito',
+    descripcion: 'Un titán loco obsesionado con el equilibrio del universo, conocido por su búsqueda de las Gemas del Infinito.',
+    imagen: thanos,
+    video: '/videos/capitan-america.mp4'
+  }
+]
+
+const activeSection = ref('inicio')
+const categoriaActual = ref('Todos')
+const personajeSeleccionado = ref<Personaje | null>(personajes[0])
+const personajeMultimedia = ref<Personaje>(personajes[0])
+
+const categorias = ['Todos', 'Héroe', 'Villano']
+
+
+const personajesFiltrados = computed(() => {
+  if (categoriaActual.value === 'Todos') return personajes
+  return personajes.filter((personaje) => personaje.categoria === categoriaActual.value)
+})
+
+
+function mostrarPersonaje(personaje: Personaje) {
+  personajeSeleccionado.value = personaje
+  setTimeout(() => {
+    document.getElementById('caracteristicas')?.scrollIntoView({ behavior: 'smooth' })
+  }, 50)
+}
+
+
+function scrollToSection(id: string) {
+  activeSection.value = id
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
+</script>
+
+
+
 <template>
   <HeaderComponent :active-section="activeSection" @navigate="scrollToSection" />
 
   <main>
-    <!-- INICIO -->
     <section id="inicio" class="hero">
       <div class="hero-overlay"></div>
       <div class="hero-content">
-        <span class="eyebrow">MARVEL COMICS • CATÁLOGO DIGITAL</span>
-        <h1>HÉROES.<br /><span>VILLANOS.</span><br />HISTORIAS.</h1>
+        <span class="eyebrow">MARVEL COMICS • WIKI PERSONAJES</span>
+        <h1>Bienvenido a la Wiki Marvel</h1>
         <p>
           Explora algunos de los personajes más representativos de Marvel Comics,
-          conoce sus poderes, historias y características principales.
+          conoce sus poderes, historias y características principales. Aprende acerca
+          de cuales son sus cómics más populares y en donde puedes ver más contenido
+          acerca de ellos y sus historias
         </p>
-        <div class="hero-actions">
-          <button class="primary-btn" @click="scrollToSection('catalogo')">
-            Explorar catálogo
-          </button>
-          <button class="secondary-btn" @click="scrollToSection('caracteristicas')">
-            Ver características
-          </button>
-        </div>
+       
       </div>
 
-      <div class="hero-badge">
-        <strong>06</strong>
-        <span>PERSONAJES<br />DESTACADOS</span>
-      </div>
     </section>
 
-    <!-- CATALOGO -->
     <section id="catalogo" class="section">
       <div class="section-heading">
-        <span class="eyebrow">01 / CATÁLOGO</span>
+        <span class="eyebrow">CATÁLOGO</span>
         <h2>Personajes destacados</h2>
         <p>
           Selecciona un personaje para consultar sus principales características.
@@ -60,10 +178,9 @@
       </div>
     </section>
 
-    <!-- CARACTERISTICAS -->
     <section id="caracteristicas" class="section dark-section">
       <div class="section-heading">
-        <span class="eyebrow">02 / CARACTERÍSTICAS</span>
+        <span class="eyebrow">CARACTERÍSTICAS</span>
         <h2>Ficha del personaje</h2>
         <p>La información se despliega mediante una función al seleccionar una tarjeta.</p>
       </div>
@@ -117,7 +234,6 @@
       </div>
     </section>
 
-    <!-- MULTIMEDIA -->
     <section id="multimedia" class="section">
       <div class="section-heading">
         <span class="eyebrow">03 / MULTIMEDIA</span>
@@ -157,7 +273,6 @@
       </div>
     </section>
 
-    <!-- INFLUENCERS -->
     <section id="influencers" class="dark-section">
       <Influencers />
     </section>
@@ -172,141 +287,6 @@
   </footer>
 </template>
 
-<script setup lang="ts">
-import { computed, ref } from 'vue'
-import HeaderComponent from './components/HeaderComponent.vue'
-import PersonajeCard, { type Personaje } from './components/PersonajeCard.vue'
-import Influencers from './components/Influencers.vue'
-
-/*
- * ARREGLO PRINCIPAL
- * Todos los atributos solicitados están reunidos en un solo arreglo.
- * Las imágenes utilizan Wikimedia Commons mediante Special:FilePath.
- * Si alguna imagen no carga, puedes reemplazar su URL por una imagen local.
- */
-const personajes: Personaje[] = [
-  {
-    id: 1,
-    nombre: 'Spider-Man',
-    alterEgo: 'Peter Parker',
-    categoria: 'Héroe',
-    universo: 'Tierra-616',
-    poderes: 'Fuerza, agilidad, sentido arácnido',
-    primeraAparicion: 'Amazing Fantasy #15 (1962)',
-    afiliacion: 'Avengers',
-    debilidad: 'Agotamiento y vulnerabilidad física',
-    descripcion: 'Un joven héroe de Nueva York que utiliza sus poderes para proteger a otras personas.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Spiderman%20%28cropped%29.jpg',
-    video: '/videos/spiderman.mp4'
-  },
-  {
-    id: 2,
-    nombre: 'Iron Man',
-    alterEgo: 'Tony Stark',
-    categoria: 'Héroe',
-    universo: 'Tierra-616',
-    poderes: 'Tecnología, armadura y estrategia',
-    primeraAparicion: 'Tales of Suspense #39 (1963)',
-    afiliacion: 'Avengers',
-    debilidad: 'Dependencia tecnológica y lesiones físicas',
-    descripcion: 'Genio, inventor y empresario que utiliza armaduras tecnológicamente avanzadas.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Iron_Man%20%28cropped%29.jpg',
-    video: '/videos/ironman.mp4'
-  },
-  {
-    id: 3,
-    nombre: 'Hulk',
-    alterEgo: 'Bruce Banner',
-    categoria: 'Héroe',
-    universo: 'Tierra-616',
-    poderes: 'Fuerza, resistencia y regeneración',
-    primeraAparicion: 'The Incredible Hulk #1 (1962)',
-    afiliacion: 'Avengers',
-    debilidad: 'Control emocional',
-    descripcion: 'Bruce Banner se transforma en Hulk, una de las entidades físicamente más poderosas de Marvel.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hulk%20%28circa%202010%29.jpg',
-    video: '/videos/hulk.mp4'
-  },
-  {
-    id: 4,
-    nombre: 'Thor',
-    alterEgo: 'Thor Odinson',
-    categoria: 'Héroe',
-    universo: 'Tierra-616',
-    poderes: 'Fuerza, longevidad y control del rayo',
-    primeraAparicion: 'Journey into Mystery #83 (1962)',
-    afiliacion: 'Avengers',
-    debilidad: 'Conflictos emocionales y límites mágicos',
-    descripcion: 'Dios asgardiano del trueno y uno de los principales defensores de la Tierra.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Thor%20by%20John%20Buscema.jpg',
-    video: '/videos/thor.mp4'
-  },
-  {
-    id: 5,
-    nombre: 'Wolverine',
-    alterEgo: 'Logan / James Howlett',
-    categoria: 'Mutante',
-    universo: 'Tierra-616',
-    poderes: 'Regeneración, sentidos aumentados y garras',
-    primeraAparicion: 'The Incredible Hulk #180 (1974)',
-    afiliacion: 'X-Men',
-    debilidad: 'Control mental y daño extremo',
-    descripcion: 'Mutante con un poderoso factor de curación y un esqueleto reforzado con adamantium.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Wolverine%20%28James%20Howlett%29.jpg',
-    video: '/videos/wolverine.mp4'
-  },
-  {
-    id: 6,
-    nombre: 'Captain America',
-    alterEgo: 'Steve Rogers',
-    categoria: 'Héroe',
-    universo: 'Tierra-616',
-    poderes: 'Fuerza mejorada, resistencia y combate',
-    primeraAparicion: 'Captain America Comics #1 (1941)',
-    afiliacion: 'Avengers',
-    debilidad: 'Limitaciones humanas y vulnerabilidad física',
-    descripcion: 'Soldado mejorado que representa uno de los símbolos heroicos más importantes de Marvel.',
-    imagen: 'https://commons.wikimedia.org/wiki/Special:FilePath/Captain_America%20%28cropped%29.jpg',
-    video: '/videos/capitan-america.mp4'
-  }
-]
-
-const activeSection = ref('inicio')
-const categoriaActual = ref('Todos')
-const personajeSeleccionado = ref<Personaje | null>(personajes[0])
-const personajeMultimedia = ref<Personaje>(personajes[0])
-
-const categorias = ['Todos', 'Héroe', 'Mutante']
-
-/*
- * FUNCTION 1:
- * Filtra el catálogo de acuerdo con la categoría seleccionada.
- */
-const personajesFiltrados = computed(() => {
-  if (categoriaActual.value === 'Todos') return personajes
-  return personajes.filter((personaje) => personaje.categoria === categoriaActual.value)
-})
-
-/*
- * FUNCTION 2:
- * Despliega la ficha de características del personaje.
- */
-function mostrarPersonaje(personaje: Personaje) {
-  personajeSeleccionado.value = personaje
-  setTimeout(() => {
-    document.getElementById('caracteristicas')?.scrollIntoView({ behavior: 'smooth' })
-  }, 50)
-}
-
-/*
- * FUNCTION 3:
- * Cambia la sección visible al pulsar el menú.
- */
-function scrollToSection(id: string) {
-  activeSection.value = id
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
-</script>
 
 <style>
 .hero {

@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.vue.js": "javascript",
+    "*.vue.ts": "typescript"
+  },
+  "files.exclude": {
+    "**/*.vue.js": true,
+    "**/*.vue.ts": true
+  }
+}

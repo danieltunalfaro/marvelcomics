@@ -1,8 +1,29 @@
+<script setup lang="ts">
+import logo from '../assets/logo.png'
+
+defineProps<{
+  activeSection: string
+}>()
+
+defineEmits<{
+  navigate: [id: string]
+}>()
+
+const menu = [
+  { id: 'inicio', label: 'Inicio' },
+  { id: 'catalogo', label: 'Catálogo' },
+  { id: 'caracteristicas', label: 'Características' },
+  { id: 'multimedia', label: 'Multimedia' },
+  { id: 'influencers', label: 'Influencers' }
+]
+</script>
+
+
 <template>
   <header class="header">
     <div class="brand">
-      <span class="brand-mark">M</span>
-      <div>
+      <img :src="logo" alt="Marvel logo" class="brand-mark" />
+      <div class="brand-text">
         <strong>MARVEL</strong>
         <small>Wiki Personajes</small>
       </div>
@@ -22,23 +43,6 @@
   </header>
 </template>
 
-<script setup lang="ts">
-defineProps<{
-  activeSection: string
-}>()
-
-defineEmits<{
-  navigate: [id: string]
-}>()
-
-const menu = [
-  { id: 'inicio', label: 'Inicio' },
-  { id: 'catalogo', label: 'Catálogo' },
-  { id: 'caracteristicas', label: 'Características' },
-  { id: 'multimedia', label: 'Multimedia' },
-  { id: 'influencers', label: 'Influencers' }
-]
-</script>
 
 <style scoped>
 .header {
@@ -58,15 +62,13 @@ const menu = [
 }
 
 .brand { display: flex; align-items: center; gap: 10px; }
+.brand-text { display: flex; flex-direction: column; }
 .brand-mark {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  background: var(--red);
-  font-family: 'Bebas Neue';
-  font-size: 28px;
-  transform: skew(-8deg);
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.35));
 }
 .brand strong { display: block; font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 1px; }
 .brand small { color: #999; font-size: 8px; letter-spacing: 2px; }
