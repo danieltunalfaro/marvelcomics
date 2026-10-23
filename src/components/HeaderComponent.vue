@@ -1,102 +1,102 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import logo from '../assets/logo.png'
 
-defineProps<{
-  activeSection: string
-}>()
+const route = useRoute()
 
-defineEmits<{
-  navigate: [id: string]
-}>()
-
-const menu = [
-  { id: 'inicio', label: 'Inicio' },
-  { id: 'catalogo', label: 'Catálogo' },
-  { id: 'caracteristicas', label: 'Características' },
-  { id: 'multimedia', label: 'Cómics' },
-  { id: 'influencers', label: 'Influencers' }
+const enlaces = [
+  { nombre: 'Inicio', ruta: '/' },
+  { nombre: 'Catálogo', ruta: '/catalogo' },
+  { nombre: 'Características', ruta: '/caracteristicas' },
+  { nombre: 'Multimedia', ruta: '/multimedia' },
+  { nombre: 'Influencers', ruta: '/influencers' },
+  { nombre: 'Soporte', ruta: '/soporte' }
 ]
 </script>
 
-
 <template>
   <header class="header">
-    <div class="brand">
-      <img :src="logo" alt="Marvel logo" class="brand-mark" />
-      <div class="brand-text">
-        <strong>MARVEL</strong>
-        <small>Wiki Personajes</small>
-      </div>
-    </div>
+    <div class="contenedor">
+      <RouterLink to="/" class="logo">
+        <img :src="logo" alt="Marvel" />
+      </RouterLink>
 
-    <nav class="nav">
-      <button
-        v-for="item in menu"
-        :key="item.id"
-        class="nav-link"
-        :class="{ active: activeSection === item.id }"
-        @click="$emit('navigate', item.id)"
-      >
-        {{ item.label }}
-      </button>
-    </nav>
+      <nav class="navegacion">
+        <RouterLink
+          v-for="enlace in enlaces"
+          :key="enlace.ruta"
+          :to="enlace.ruta"
+          class="enlace"
+          :class="{ activo: route.path === enlace.ruta }"
+        >
+          {{ enlace.nombre }}
+        </RouterLink>
+      </nav>
+    </div>
   </header>
 </template>
 
-
 <style scoped>
 .header {
-  position: fixed;
+  width: 100%;
+  background-color: #151515;
+  border-bottom: 2px solid #e62429;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  height: 76px;
-  z-index: 100;
+  z-index: 1000;
+}
+
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 5vw;
-  background: rgba(9, 9, 9, 0.94);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
+  gap: 25px;
 }
 
-.brand { display: flex; align-items: center; gap: 10px; }
-.brand-text { display: flex; flex-direction: column; }
-.brand-mark {
-  width: 32px;
-  height: 32px;
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 90px;
+  height: auto;
   object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.35));
-}
-.brand strong { display: block; font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 1px; }
-.brand small { color: #999; font-size: 8px; letter-spacing: 2px; }
-.nav { display: flex; gap: 5px; }
-.nav-link {
-  border: 0;
-  background: transparent;
-  color: #aaa;
-  padding: 10px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.nav-link:hover, .nav-link.active { color: #fff; }
-.nav-link.active { border-bottom: 2px solid var(--red); }
-
-@media (max-width: 900px) {
-  .nav-link { padding: 10px 6px; font-size: 9px; }
 }
 
-@media (max-width: 620px) {
-  .header {
-    height: auto;
-    min-height: 70px;
-    padding: 10px 5vw;
-    flex-wrap: wrap;
+.navegacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.enlace {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+.enlace:hover,
+.enlace.activo {
+  color: #e62429;
+}
+
+@media (max-width: 700px) {
+  .contenedor {
+    flex-direction: column;
+    gap: 15px;
   }
-  .nav { width: 100%; overflow-x: auto; order: 2; }
+
+  .navegacion {
+    gap: 15px;
+  }
 }
 </style>
