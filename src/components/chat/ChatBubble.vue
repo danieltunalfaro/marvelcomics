@@ -1,25 +1,52 @@
-<template>
-    <div v-if="itsMine" class="flex justify-end">
-        <div class="bg-blue-200 text-black p-2 rounded-lg max-w-xs">
-        {{ message }}
-        </div>
-    </div>
-
-    <!-- Example Received Message -->
-    <div class="flex">
-        <div class="bg-gray-300 text-black p-2 rounded-lg max-w-xs">
-        <span class="capitalize">{{ message }}</span>
-        <img v-if="image" :src="image" alt="YesNoImage" class="w-52 h-52 object-cover rounded-md">
-        {{  message }}
-        </div>
-    </div>
-</template>
 <script setup lang="ts">
-    interface Props {
-        message: string;
-        itsMine: boolean;
-        image?:string;
-    }
+interface Props {
+  message: string
+  itsMine: boolean
+  image?: string
+}
 
-    defineProps<Props>();
+defineProps<Props>()
 </script>
+
+<template>
+  <!-- Mensaje propio -->
+  <div v-if="itsMine" class="flex justify-end px-2 py-1">
+    <div
+      class="max-w-[85%] min-w-[100px] rounded-2xl rounded-br-sm
+             bg-red-600 px-6 py-4 text-base leading-7
+             text-white shadow-md"
+    >
+      <p class="whitespace-pre-wrap break-words">
+        {{ message }}
+      </p>
+
+      <img
+        v-if="image"
+        :src="image"
+        alt="Imagen del mensaje"
+        class="mt-4 h-auto max-w-full rounded-lg"
+      />
+    </div>
+  </div>
+
+  <!-- Mensaje recibido -->
+  <div v-else class="flex justify-start px-2 py-1">
+    <div
+      class="max-w-[85%] min-w-[100px] rounded-2xl rounded-bl-sm
+             border border-neutral-700 bg-neutral-800
+             px-6 py-4 text-base leading-7
+             text-neutral-100 shadow-md"
+    >
+      <p class="whitespace-pre-wrap break-words">
+        {{ message }}
+      </p>
+
+      <img
+        v-if="image"
+        :src="image"
+        alt="Imagen del mensaje"
+        class="mt-4 h-auto max-w-full rounded-lg"
+      />
+    </div>
+  </div>
+</template>

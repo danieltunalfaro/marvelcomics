@@ -1,26 +1,25 @@
 <script setup lang="ts">
-import type { ChatMessage } from '../../interfaces/chat-message.interface.ts';
-import ChatBubble from './ChatBubble.vue';
+import type { ChatMessage } from '../../interfaces/chat-message.interface'
+import ChatBubble from './ChatBubble.vue'
+
 interface Props {
-    messages: ChatMessage[]
+  messages: ChatMessage[]
 }
-defineProps<Props>();
+
+defineProps<Props>()
 </script>
 
+
 <template>
-    <div class="flex-1 overflow-y-auto p-4">
-        <div class="flex flex-col space-y-2">
-        <!-- Messages go here -->
-        <!-- Example Message -->
-         <ChatBubble 
-         v-for="message in messages" 
-         :key="message.id" 
-         v-bind="message" />
-        <!-- 
-         El v-bind sustituye todo lo que se tiene en la parte de abajo
-         :its-mine="message.itsMine" 
-         :message="message.message" 
-         :image="message.image"-->
-        </div>
+  <div class="min-h-0 flex-1 overflow-y-auto bg-neutral-950 p-4 sm:p-6">
+    <div class="flex flex-col gap-4">
+      <ChatBubble
+        v-for="message in messages"
+        :key="message.id"
+        v-bind="message"
+      />
     </div>
+  </div>
 </template>
+
+
