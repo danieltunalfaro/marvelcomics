@@ -1,215 +1,247 @@
-
 <script setup lang="ts">
-import type { Personaje } from './PersonajeCard.vue'
+import type { Personaje } from './PersonajeCard.vue';
 
 defineProps<{
   personaje: Personaje | null
-}>()
+}>();
 
 const emit = defineEmits<{
-  cerrar: []
-}>()
+  (e: 'cerrar'): void
+  (e: 'verMultimedia'): void
+}>();
 </script>
 
 <template>
-  <section id="caracteristicas" class="dark-section">
-    <div class="section-heading">
-      <h2 class="eyebrow">CARACTERÍSTICAS</h2>
-    </div>
+  <div class="contenedor-caracteristicas">
 
-    <div v-if="personaje" class="character-detail">
-      <div class="detail-top">
+    <div v-if="personaje" class="ficha">
+
+      <div class="imagen-personaje">
         <img
           :src="personaje.imagen"
           :alt="personaje.nombre"
-          class="detail-image"
         />
-
-        <div class="detail-info">
-          <span class="eyebrow">{{ personaje.categoria }}</span>
-          <h2>{{ personaje.nombre }}</h2>
-          <p class="detail-alter">{{ personaje.alterEgo }}</p>
-          <p>{{ personaje.descripcion }}</p>
-        </div>
       </div>
 
-      <ul class="feature-list">
-        <li class="feature">
-          <small>PODERES</small>
-          <strong>{{ personaje.poderes }}</strong>
-        </li>
+      <div class="informacion">
 
-        <li class="feature">
-          <small>PRIMERA APARICIÓN</small>
-          <strong>{{ personaje.primeraAparicion }}</strong>
-        </li>
+        <h1>{{ personaje.nombre }}</h1>
 
-        <li class="feature">
-          <small>AFILIACIÓN</small>
-          <strong>{{ personaje.afiliacion }}</strong>
-        </li>
+        <p class="descripcion">
+          {{ personaje.descripcion }}
+        </p>
 
-        <li class="feature">
-          <small>DEBILIDAD</small>
-          <strong>{{ personaje.debilidad }}</strong>
-        </li>
+        <div class="datos">
 
-        <li class="feature">
-          <small>UNIVERSO</small>
-          <strong>{{ personaje.universo }}</strong>
-        </li>
-      </ul>
+          <div class="dato">
+            <h3>Alter ego</h3>
+            <p>{{ personaje.alterEgo }}</p>
+          </div>
 
-      <button class="secondary-btn" @click="emit('cerrar')">
-        Cerrar ficha
+          <div class="dato">
+            <h3>Categoría</h3>
+            <p>{{ personaje.categoria }}</p>
+          </div>
+
+          <div class="dato">
+            <h3>Universo</h3>
+            <p>{{ personaje.universo }}</p>
+          </div>
+
+          <div class="dato">
+            <h3>Primera aparición</h3>
+            <p>{{ personaje.primeraAparicion }}</p>
+          </div>
+
+          <div class="dato">
+            <h3>Afiliación</h3>
+            <p>{{ personaje.afiliacion }}</p>
+          </div>
+
+          <div class="dato">
+            <h3>Debilidad</h3>
+            <p>{{ personaje.debilidad }}</p>
+          </div>
+
+          <div class="dato poderes">
+            <h3>Poderes</h3>
+            <p>{{ personaje.poderes }}</p>
+          </div>
+
+        </div>
+
+        <div class="botones">
+          <button @click="emit('verMultimedia')">
+            Ver mejores cómics
+          </button>
+
+          <button class="btn-cerrar" @click="emit('cerrar')">
+            Regresar al catálogo
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div v-else class="sin-personaje">
+      <h2>Personaje no encontrado</h2>
+      <p>No se encontró información del personaje seleccionado.</p>
+
+      <button @click="emit('cerrar')">
+        Regresar al catálogo
       </button>
     </div>
 
-    <div v-else class="empty-state">
-      <div class="empty-icon">+</div>
-      <h3>Selecciona un personaje</h3>
-      <p>
-        Haz clic en “Ver características” en cualquier tarjeta del catálogo.
-      </p>
-    </div>
-  </section>
+  </div>
 </template>
 
 <style scoped>
-.dark-section {
-  background: #0f0f0f;
-  padding: 100px 8vw;
+.contenedor-caracteristicas {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  color: white;
 }
 
-.section-heading {
-  margin-bottom: 45px;
-}
-
-.eyebrow {
-  color: var(--red);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2.5px;
-}
-
-.character-detail {
+.ficha {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  align-items: flex-start;
+  gap: 35px;
+  background-color: #181818;
+  padding: 30px;
+  border-radius: 12px;
 }
 
-.detail-top {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.8fr);
-  gap: 50px;
-  align-items: start;
+.imagen-personaje {
+  width: 38%;
+  flex-shrink: 0;
 }
 
-.detail-image {
+.imagen-personaje img {
   width: 100%;
-  max-height: 600px;
+  height: 500px;
   object-fit: cover;
-  background: #181818;
+  border-radius: 10px;
 }
 
-.detail-info {
-  min-width: 0;
+.informacion {
+  flex: 1;
 }
 
-.detail-info h2 {
-  font-family: 'Bebas Neue';
-  font-size: 80px;
-  line-height: 0.9;
-  margin: 8px 0;
+.informacion h1 {
+  color: #e62429;
+  font-size: 32px;
+  margin: 0 0 15px;
 }
 
-.detail-alter {
-  color: #777;
-  margin-bottom: 18px;
-}
-
-.detail-info p {
-  color: #aaa;
-  line-height: 1.7;
+.descripcion {
+  color: #cccccc;
+  line-height: 1.6;
   margin-bottom: 25px;
 }
 
-.feature-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.feature {
-  padding: 18px;
-  border-bottom: 1px solid #292929;
-}
-
-.feature small {
-  display: block;
-  color: var(--red);
-  font-weight: 800;
-  font-size: 10px;
-  margin-bottom: 8px;
-}
-
-.feature strong {
-  display: block;
-  color: #fff;
-  line-height: 1.6;
-  overflow-wrap: break-word;
-}
-
-.secondary-btn {
-  padding: 14px 20px;
-  color: #fff;
-  background: transparent;
-  border: 1px solid #555;
-  cursor: pointer;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.secondary-btn:hover {
-  border-color: #fff;
-}
-
-.empty-state {
-  min-height: 300px;
+.datos {
   display: grid;
-  place-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.dato {
+  background-color: #252525;
+  padding: 15px;
+  border-radius: 8px;
+  min-width: 0;
+}
+
+.dato h3 {
+  color: #e62429;
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.dato p {
+  color: white;
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.poderes {
+  grid-column: span 2;
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.botones button,
+.sin-personaje button {
+  background-color: #e62429;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.botones button:hover,
+.sin-personaje button:hover {
+  background-color: #b71c1c;
+}
+
+.botones .btn-cerrar {
+  background-color: #444;
+}
+
+.botones .btn-cerrar:hover {
+  background-color: #666;
+}
+
+.sin-personaje {
   text-align: center;
-  border: 1px dashed #333;
-  padding: 40px;
+  padding: 60px 20px;
+  background-color: #181818;
+  border-radius: 12px;
 }
 
-.empty-icon {
-  color: var(--red);
-  font-size: 40px;
+.sin-personaje h2 {
+  color: #e62429;
 }
 
-.empty-state h3 {
-  font-family: 'Bebas Neue';
-  font-size: 32px;
+.sin-personaje p {
+  color: #ccc;
 }
 
-.empty-state p {
-  color: #777;
+@media (max-width: 750px) {
+  .ficha {
+    flex-direction: column;
+  }
+
+  .imagen-personaje {
+    width: 100%;
+  }
+
+  .imagen-personaje img {
+    height: 350px;
+  }
 }
 
-@media (max-width: 900px) {
-  .detail-top {
+@media (max-width: 500px) {
+  .datos {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 620px) {
-  .dark-section {
-    padding: 70px 6vw;
+  .poderes {
+    grid-column: span 1;
   }
 
-  .detail-info h2 {
-    font-size: 60px;
+  .informacion h1 {
+    font-size: 26px;
   }
 }
 </style>

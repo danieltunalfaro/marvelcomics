@@ -7,6 +7,8 @@ import CaracteristicasView from '../views/CaracteristicasView.vue'
 import MultimediaView from '../views/MultimediaView.vue'
 import InfluencersView from '../views/InfluencersView.vue'
 import SoporteView from '../views/SoporteView.vue'
+import TiendaView from '../views/TiendaView.vue'
+import CalendarioView from '../views/CalendarioView.vue'
 
 const routes = [
   { path: '/', name: 'inicio', component: InicioView},
@@ -14,7 +16,9 @@ const routes = [
   { path: '/caracteristicas', name: 'caracteristicas', component: CaracteristicasView},
   { path: '/multimedia', name: 'multimedia', component: MultimediaView},
   { path: '/influencers', name: 'influencers', component: InfluencersView},
-  { path: '/soporte', name: 'soporte', component: SoporteView}
+  { path: '/soporte', name: 'soporte', component: SoporteView},
+  { path: '/tienda', name: 'tienda', component: TiendaView},
+  { path: '/calendario', name: 'calendario', component: CalendarioView}
 ]
 
 const router = createRouter({

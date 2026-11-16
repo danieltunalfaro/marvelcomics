@@ -1,3 +1,27 @@
+<script setup lang="ts">
+  export interface Personaje {
+    id: number
+    nombre: string
+    alterEgo: string
+    categoria: string
+    universo: string
+    poderes: string
+    primeraAparicion: string
+    afiliacion: string
+    debilidad: string
+    descripcion: string
+    imagen: string
+  }
+
+  defineProps<{
+    personaje: Personaje
+  }>()
+
+  defineEmits<{
+    select: [personaje: Personaje]
+  }>()
+</script>
+
 <template>
   <article class="character-card">
     <div class="card-image-wrap">
@@ -17,29 +41,7 @@
   </article>
 </template>
 
-<script setup lang="ts">
-export interface Personaje {
-  id: number
-  nombre: string
-  alterEgo: string
-  categoria: string
-  universo: string
-  poderes: string
-  primeraAparicion: string
-  afiliacion: string
-  debilidad: string
-  descripcion: string
-  imagen: string
-}
 
-defineProps<{
-  personaje: Personaje
-}>()
-
-defineEmits<{
-  select: [personaje: Personaje]
-}>()
-</script>
 
 <style scoped>
 .character-card {

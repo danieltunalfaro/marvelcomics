@@ -1,36 +1,97 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import logo from '../assets/logo.png'
 
 const route = useRoute()
-
-const enlaces = [
-  { nombre: 'Inicio', ruta: '/' },
-  { nombre: 'Catálogo', ruta: '/catalogo' },
-  { nombre: 'Características', ruta: '/caracteristicas' },
-  { nombre: 'Multimedia', ruta: '/multimedia' },
-  { nombre: 'Influencers', ruta: '/influencers' },
-  { nombre: 'Soporte', ruta: '/soporte' }
-]
 </script>
 
 <template>
   <header class="header">
     <div class="contenedor">
+
       <RouterLink to="/" class="logo">
-        <img :src="logo" alt="Marvel" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Marvel_Logo.svg?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=original" alt="Marvel" />
       </RouterLink>
 
       <nav class="navegacion">
+
         <RouterLink
-          v-for="enlace in enlaces"
-          :key="enlace.ruta"
-          :to="enlace.ruta"
+          to="/"
           class="enlace"
-          :class="{ activo: route.path === enlace.ruta }"
+          :class="{ activo: route.path === '/' }"
         >
-          {{ enlace.nombre }}
+          Inicio
         </RouterLink>
+
+        <!-- Menú desplegable de Catálogo -->
+        <div class="dropdown">
+
+          <RouterLink
+            to="/catalogo"
+            class="enlace"
+            :class="{ activo: route.path === '/catalogo' }"
+          >
+            Personajes
+          </RouterLink>
+
+          <div class="dropdown-menu">
+
+            <RouterLink
+              to="/catalogo?compania=marvel"
+              class="dropdown-item"
+            >
+              Marvel
+            </RouterLink>
+
+            <RouterLink
+              to="/catalogo?compania=dc"
+              class="dropdown-item"
+            >
+              DC Comics
+            </RouterLink>
+
+            <RouterLink
+              to="/catalogo?compania=image"
+              class="dropdown-item"
+            >
+              Image Comics
+            </RouterLink>
+
+          </div>
+        </div>
+
+        <RouterLink 
+          to="/tienda"
+          class="enlace"
+          :class="{ activo: route.path === '/tienda' }"
+          >
+            Tienda
+        </RouterLink>
+
+        <RouterLink 
+          to="/calendario"
+          class="enlace"
+          :class="{ activo: route.path === '/calendario' }"
+          >
+            Calendario
+        </RouterLink>
+
+        <RouterLink
+          to="/soporte"
+          class="enlace"
+          :class="{ activo: route.path === '/soporte' }"
+        >
+          Soporte
+        </RouterLink>
+
+        <RouterLink
+          to="/influencers"
+          class="enlace"
+          :class="{ activo: route.path === '/influencers' }"
+        >
+          Inicio de sesión
+        </RouterLink>        
+
       </nav>
     </div>
   </header>
@@ -87,6 +148,46 @@ const enlaces = [
 .enlace:hover,
 .enlace.activo {
   color: #e62429;
+}
+
+/* Menú desplegable */
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  background-color: #151515;
+  border: 1px solid #333;
+  border-top: 2px solid #e62429;
+  border-radius: 0 0 6px 6px;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 12px 15px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+  background-color: #b71c1c;
+  color: white;
 }
 
 @media (max-width: 700px) {
