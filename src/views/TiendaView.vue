@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { comics } from '../constants/comics';
+import { agregarAlCarrito } from '../constants/carrito';
 
-// Carrito de compras
 const carrito = ref<typeof comics>([]);
 
-// Agregar un cómic al carrito
-function agregarAlCarrito(comic: typeof comics[number]) {
-  carrito.value.push(comic);
-}
-
-// Cantidad de cómics en el carrito
 const cantidadCarrito = computed(() => {
   return carrito.value.length;
 });
 
-// Total de la compra
 const totalCompra = computed(() => {
   return carrito.value.reduce((total, comic) => {
     return total + comic.precio;
@@ -26,25 +19,13 @@ const totalCompra = computed(() => {
 <template>
   <div class="tienda">
 
-    <!-- Encabezado de la tienda -->
     <div class="encabezado">
       <div>
         <h1>Tienda de Cómics</h1>
         <p>Explora y adquiere tus cómics favoritos</p>
-      </div>
-
-      <div class="carrito">
-        <span class="icono-carrito">🛒</span>
-
-        <div>
-          <p>Carrito</p>
-          <h3>{{ cantidadCarrito }} cómics</h3>
-          <h3>${{ totalCompra }} MXN</h3>
-        </div>
-      </div>
+      </div>     
     </div>
 
-    <!-- Catálogo de cómics -->
     <div class="catalogo-tienda">
 
       <div

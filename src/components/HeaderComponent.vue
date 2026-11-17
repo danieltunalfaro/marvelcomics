@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, RouterLink } from 'vue-router'
-import logo from '../assets/logo.png'
+import { carrito } from '../constants/carrito'
 
 const route = useRoute()
 </script>
@@ -10,7 +10,10 @@ const route = useRoute()
     <div class="contenedor">
 
       <RouterLink to="/" class="logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Marvel_Logo.svg?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=original" alt="Marvel" />
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Marvel_Logo.svg?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=original"
+          alt="Marvel"
+        />
       </RouterLink>
 
       <nav class="navegacion">
@@ -23,7 +26,6 @@ const route = useRoute()
           Inicio
         </RouterLink>
 
-        <!-- Menú desplegable de Catálogo -->
         <div class="dropdown">
 
           <RouterLink
@@ -60,21 +62,24 @@ const route = useRoute()
           </div>
         </div>
 
-        <RouterLink 
+
+        <RouterLink
           to="/tienda"
           class="enlace"
           :class="{ activo: route.path === '/tienda' }"
-          >
-            Tienda
+        >
+          Tienda
         </RouterLink>
 
-        <RouterLink 
+
+        <RouterLink
           to="/calendario"
           class="enlace"
           :class="{ activo: route.path === '/calendario' }"
-          >
-            Calendario
+        >
+          Calendario
         </RouterLink>
+
 
         <RouterLink
           to="/soporte"
@@ -84,13 +89,27 @@ const route = useRoute()
           Soporte
         </RouterLink>
 
+
         <RouterLink
           to="/influencers"
           class="enlace"
           :class="{ activo: route.path === '/influencers' }"
         >
           Inicio de sesión
-        </RouterLink>        
+        </RouterLink>
+
+
+        <RouterLink
+          to="/carrito"
+          class="carrito-nav"
+          :class="{ activo: route.path === '/carrito' }"
+        >
+          <span class="icono-carrito">🛒</span>
+
+          <span class="contador-carrito">
+            {{ carrito.length }}
+          </span>
+        </RouterLink>
 
       </nav>
     </div>
@@ -134,6 +153,7 @@ const route = useRoute()
   align-items: center;
   justify-content: center;
   gap: 25px;
+  flex: 1;
   flex-wrap: wrap;
 }
 
@@ -185,9 +205,48 @@ const route = useRoute()
   transition: background-color 0.3s;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover,
+.dropdown-item.router-link-active {
   background-color: #b71c1c;
   color: white;
+}
+
+/* Carrito */
+.carrito-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  background-color: #252525;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.carrito-nav:hover,
+.carrito-nav.activo {
+  background-color: #b71c1c;
+}
+
+.icono-carrito {
+  font-size: 22px;
+}
+
+.contador-carrito {
+  color: white;
+  background-color: #e62429;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 700px) {
@@ -197,7 +256,12 @@ const route = useRoute()
   }
 
   .navegacion {
+    width: 100%;
     gap: 15px;
+  }
+
+  .carrito-nav {
+    margin-left: auto;
   }
 }
 </style>
